@@ -104,11 +104,14 @@ function TrailDot({ x, y, opacity }) {
   );
 }
 
+const isTouchDevice = () => window.matchMedia("(pointer: coarse)").matches;
+
 export default function App() {
   const [tab, setTab] = useState("home");
   const [introVisible, setIntroVisible] = useState(true);
   const [chatOpen, setChatOpen] = useState(false);
-const [cursorPos, setCursorPos] = useState({ x: -200, y: -200 });
+  const [isTouch] = useState(isTouchDevice);
+  const [cursorPos, setCursorPos] = useState({ x: -200, y: -200 });
   const [trail, setTrail] = useState([]);
   const trailRef = useRef([]);
   const rafRef = useRef();
@@ -144,11 +147,11 @@ const [cursorPos, setCursorPos] = useState({ x: -200, y: -200 });
       {introVisible && <IntroScreen onDone={() => setIntroVisible(false)} />}
       <NanotechBackground />
 
-      {/* Peacock feather cursor — hidden when chat is open */}
-      {!chatOpen && <PeacockCursor x={cursorPos.x} y={cursorPos.y} />}
+      {/* Peacock feather cursor — desktop only, hidden when chat is open */}
+      {!isTouch && !chatOpen && <PeacockCursor x={cursorPos.x} y={cursorPos.y} />}
 
-      {/* Trailing glow dots */}
-      {trail.map((t, i) => (
+      {/* Trailing glow dots — desktop only */}
+      {!isTouch && trail.map((t, i) => (
         <TrailDot key={t.id} x={t.x} y={t.y} opacity={(1 - i / trail.length) * 0.55} />
       ))}
 

@@ -27,6 +27,12 @@ export default function IntroScreen({ onDone }) {
           transition: transform 2.2s cubic-bezier(0.76, 0, 0.24, 1);
           overflow: hidden;
         }
+        @media (max-width: 640px) {
+          .intro-curtain {
+            background-image: url('/krishna-mobile-bg.png');
+            background-position: center top;
+          }
+        }
         .intro-curtain::before {
           content: '';
           position: absolute; inset: 0;
