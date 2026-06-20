@@ -3,6 +3,36 @@ import { SLOKAS, CHAPTERS } from "../data/slokas";
 import SlokaCard from "../components/SlokaCard";
 import gitaData from "../data/gita_700.json";
 
+const API_KEY = import.meta.env.VITE_GROQ_API_KEY;
+
+async function fetchKrishnaMessage(verse) {
+  try {
+    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${API_KEY}` },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        temperature: 0.85,
+        max_tokens: 120,
+        messages: [
+          {
+            role: "system",
+            content: `You are Krishna speaking directly to the reader. Based ONLY on this specific verse, give a short personal message (2-3 sentences) in the style of Sourabh Raaj Jain's Krishna from Mahabharat — poetic, dignified, warm. No chapter/verse numbers. No slang. Speak as if whispering to a beloved friend.`
+          },
+          {
+            role: "user",
+            content: `Verse: "${verse.english}"\nMeaning: "${verse.meaning}"\n\nSpeak your message to the reader.`
+          }
+        ]
+      })
+    });
+    const data = await res.json();
+    return data.choices?.[0]?.message?.content?.trim() || null;
+  } catch {
+    return null;
+  }
+}
+
 // ── Daily sloka logic ─────────────────────────────────────────────────────────
 // Fixed epoch: Jan 1 2024. Day 0 = verse 1, Day 1 = verse 2, cycles all 700.
 // Same for every user on the same calendar day — locked at midnight.
@@ -37,6 +67,19 @@ export default function HomePage() {
   const ch = CHAPTERS[daily.ch - 1];
   const [liked, setLiked] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [krishnaMsg, setKrishnaMsg] = useState(null);
+  const [krishnaLoading, setKrishnaLoading] = useState(false);
+
+  async function handleExpand() {
+    const next = !expanded;
+    setExpanded(next);
+    if (next && !krishnaMsg && !krishnaLoading) {
+      setKrishnaLoading(true);
+      const msg = await fetchKrishnaMessage(daily);
+      setKrishnaMsg(msg);
+      setKrishnaLoading(false);
+    }
+  }
 
   return (
     <div className="page">
@@ -76,7 +119,7 @@ export default function HomePage() {
         {/* Expand button */}
         <button
           className="btn"
-          onClick={() => setExpanded(e => !e)}
+          onClick={handleExpand}
           style={{ marginTop: "1rem", background: "rgba(0,195,137,0.12)", color: "var(--pk-aqua)", border: "1px solid rgba(0,195,137,0.3)" }}
         >
           {expanded ? "▲ Less" : "▼ More — Understanding & Krishna's Message"}
@@ -97,11 +140,12 @@ export default function HomePage() {
                 <p style={{ fontSize: "0.92rem", color: "rgba(212,245,238,0.75)", lineHeight: 1.75 }}>{daily.life}</p>
               </div>
             )}
-            {daily.krishna && (
-              <div style={{ padding: "0.75rem 1rem", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)", borderRadius: "8px" }}>
-                <p style={{ fontSize: "0.9rem", fontStyle: "italic", color: "#F5C842", lineHeight: 1.7 }}>🪷 {daily.krishna}</p>
-              </div>
-            )}
+            <div style={{ padding: "0.75rem 1rem", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)", borderRadius: "8px", minHeight: "3rem" }}>
+              {krishnaLoading
+                ? <p style={{ fontSize: "0.85rem", color: "rgba(212,175,55,0.5)", fontStyle: "italic" }}>🪷 Krishna is speaking...</p>
+                : <p style={{ fontSize: "0.9rem", fontStyle: "italic", color: "#F5C842", lineHeight: 1.7 }}>🪷 {krishnaMsg || daily.krishna}</p>
+              }
+            </div>
           </div>
         )}
 
