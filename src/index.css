@@ -111,9 +111,21 @@ body {
     justify-content: space-between;
   }
   .nav-brand {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    position: static;
+    transform: none;
+    flex: 0 1 auto;
+    min-width: 0;
+    padding: 0.35rem 0.6rem;
+    margin-right: 0.5rem;
+    border-right: none;
+    border-radius: 8px;
+  }
+  .brand-text {
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+  }
+  .brand-om {
+    font-size: 1rem;
   }
 }
 /* Sacred Book button — right side gold */
