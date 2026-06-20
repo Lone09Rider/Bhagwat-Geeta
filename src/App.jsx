@@ -167,12 +167,16 @@ export default function App() {
         <Navbar active={tab} onChange={setTab} />
         {pages[tab]}
         <footer style={{
+          position: "fixed",
+          bottom: 0, left: 0, right: 0,
+          zIndex: 150,
           textAlign: "center",
-          padding: "1.5rem 1rem",
-          borderTop: "1px solid rgba(0,195,137,0.1)",
-          fontSize: "0.78rem",
+          padding: "0.5rem 1rem",
+          background: "rgba(2,12,16,0.92)",
+          backdropFilter: "blur(12px)",
+          borderTop: "1px solid rgba(0,195,137,0.12)",
+          fontSize: "0.75rem",
           color: "rgba(212,245,238,0.3)",
-          marginTop: "2rem",
         }}>
           🕉 Madhav Geeta Saar &nbsp;·&nbsp;
           <button onClick={() => setTab("privacy")} style={{
