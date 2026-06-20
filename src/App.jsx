@@ -7,6 +7,7 @@ import ExplorerPage from "./pages/ExplorerPage";
 import SearchPage from "./pages/SearchPage";
 import MapPage from "./pages/MapPage";
 import BookPage from "./pages/BookPage";
+import PrivacyPage from "./pages/PrivacyPage";
 import KrishnaChatWidget from "./components/KrishnaChatWidget";
 
 // Peacock feather SVG cursor — eye at top, quill tip at bottom (real feather shape)
@@ -140,6 +141,7 @@ export default function App() {
     search:    <SearchPage />,
     map:       <MapPage />,
     book:      <BookPage />,
+    privacy:   <PrivacyPage />,
   };
 
   return (
@@ -164,6 +166,21 @@ export default function App() {
       <div style={{ position: "relative", zIndex: 1 }}>
         <Navbar active={tab} onChange={setTab} />
         {pages[tab]}
+        <footer style={{
+          textAlign: "center",
+          padding: "1.5rem 1rem",
+          borderTop: "1px solid rgba(0,195,137,0.1)",
+          fontSize: "0.78rem",
+          color: "rgba(212,245,238,0.3)",
+          marginTop: "2rem",
+        }}>
+          🕉 Madhav Geeta Saar &nbsp;·&nbsp;
+          <button onClick={() => setTab("privacy")} style={{
+            background: "none", border: "none", color: "#3DD6C8",
+            cursor: "pointer", fontSize: "0.78rem", textDecoration: "underline", padding: 0,
+          }}>Privacy Policy</button>
+          &nbsp;·&nbsp; sr009j@gmail.com
+        </footer>
       </div>
 
       <KrishnaChatWidget onOpenChange={setChatOpen} />
