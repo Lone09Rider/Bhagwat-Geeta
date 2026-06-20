@@ -109,7 +109,7 @@ export default function HomePage() {
         <button
           className="btn"
           onClick={() => setLiked(l => !l)}
-          style={{ marginTop: "1rem", background: liked ? "rgba(0,195,137,0.2)" : "rgba(255,255,255,0.08)", color: "#fff", border: "1px solid rgba(255,255,255,0.2)" }}
+          style={{ marginTop: "2.5rem", background: liked ? "rgba(0,195,137,0.2)" : "rgba(255,255,255,0.08)", color: "#fff", border: "1px solid rgba(255,255,255,0.2)" }}
         >
           {liked ? "♥ Saved" : "♡ Save this sloka"}
         </button>
