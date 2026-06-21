@@ -204,24 +204,28 @@ export default function ExplorerPage() {
                 key={ch.num}
                 onClick={() => setActiveChapter({ ch, accent, icon })}
                 style={{
-                  background: `linear-gradient(135deg, ${accent}12, ${accent}06)`,
-                  border: `1px solid ${accent}40`,
+                  background: `linear-gradient(145deg, rgba(4,22,32,0.92), rgba(2,14,22,0.88))`,
+                  border: `1px solid ${accent}55`,
                   borderRadius: "14px",
                   padding: "1.25rem 1rem",
                   cursor: "pointer",
                   display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem",
-                  transition: "transform 0.18s, box-shadow 0.18s, border-color 0.18s",
+                  transition: "transform 0.18s, box-shadow 0.18s, border-color 0.18s, background 0.18s",
                   position: "relative", overflow: "hidden",
+                  backdropFilter: "blur(16px)",
+                  boxShadow: `0 2px 12px rgba(0,0,0,0.5), inset 0 1px 0 ${accent}22`,
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.transform = "translateY(-4px) scale(1.03)";
-                  e.currentTarget.style.boxShadow = `0 8px 32px ${accent}44`;
+                  e.currentTarget.style.boxShadow = `0 8px 32px ${accent}55, inset 0 1px 0 ${accent}33`;
                   e.currentTarget.style.borderColor = accent;
+                  e.currentTarget.style.background = `linear-gradient(145deg, ${accent}18, rgba(2,14,22,0.92))`;
                 }}
                 onMouseLeave={e => {
                   e.currentTarget.style.transform = "";
-                  e.currentTarget.style.boxShadow = "";
-                  e.currentTarget.style.borderColor = `${accent}40`;
+                  e.currentTarget.style.boxShadow = `0 2px 12px rgba(0,0,0,0.5), inset 0 1px 0 ${accent}22`;
+                  e.currentTarget.style.borderColor = `${accent}55`;
+                  e.currentTarget.style.background = `linear-gradient(145deg, rgba(4,22,32,0.92), rgba(2,14,22,0.88))`;
                 }}
               >
                 <div style={{
