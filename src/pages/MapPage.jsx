@@ -60,21 +60,24 @@ export default function MapPage() {
         <p style={{ textAlign: "center", fontSize: "0.8rem", color: "var(--muted)", marginTop: "0.5rem" }}>Hover over a chapter node to see details</p>
       </div>
 
-      <h3 style={{ fontFamily: "Georgia,serif", fontSize: "1.3rem", color: "var(--deep2)", marginBottom: "1rem" }}>All 18 Chapters</h3>
+      <h3 style={{ fontFamily: "'Rajdhani',sans-serif", fontSize: "1.3rem", color: "var(--pk-aqua)", marginBottom: "1rem", letterSpacing: "0.04em" }}>All 18 Chapters</h3>
       <div className="grid-3">
-        {CHAPTERS.map((ch, i) => (
-          <div key={ch.num} className="card" style={{ borderLeft: `3px solid ${COLORS[Math.floor(i / 3) % COLORS.length]}` }}>
-            <div style={{ display: "flex", gap: "0.75rem" }}>
-              <span style={{ fontSize: "1.5rem", fontFamily: "Georgia,serif", fontWeight: 700, color: "var(--saffron)", lineHeight: 1, flexShrink: 0 }}>{ch.num}</span>
-              <div>
-                <p style={{ fontWeight: 600, fontSize: "0.88rem", color: "var(--deep2)", marginBottom: "0.2rem" }}>{ch.name}</p>
-                <p className="devanagari" style={{ fontSize: "0.78rem", color: "var(--muted)", marginBottom: "0.35rem" }}>{ch.dev}</p>
-                <p style={{ fontSize: "0.8rem", color: "var(--muted)", lineHeight: 1.6 }}>{ch.desc}</p>
-                <span style={{ fontSize: "0.75rem", color: "var(--saffron)", marginTop: "0.3rem", display: "block" }}>{ch.slokas} slokas</span>
+        {CHAPTERS.map((ch, i) => {
+          const color = COLORS[Math.floor(i / 3) % COLORS.length];
+          return (
+            <div key={ch.num} className="card" style={{ borderLeft: `3px solid ${color}` }}>
+              <div style={{ display: "flex", gap: "0.75rem" }}>
+                <span style={{ fontSize: "1.6rem", fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, color, lineHeight: 1, flexShrink: 0 }}>{ch.num}</span>
+                <div>
+                  <p style={{ fontWeight: 600, fontSize: "0.9rem", color: "#d4f5ee", marginBottom: "0.2rem" }}>{ch.name}</p>
+                  <p className="devanagari" style={{ fontSize: "0.78rem", color: "var(--pk-aqua)", marginBottom: "0.35rem", opacity: 0.75 }}>{ch.dev}</p>
+                  <p style={{ fontSize: "0.8rem", color: "rgba(212,245,238,0.6)", lineHeight: 1.6 }}>{ch.desc}</p>
+                  <span style={{ fontSize: "0.75rem", color, marginTop: "0.3rem", display: "block", fontWeight: 600 }}>{ch.slokas} slokas</span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
