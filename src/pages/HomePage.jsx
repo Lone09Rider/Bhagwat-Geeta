@@ -1,7 +1,18 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { SLOKAS, CHAPTERS } from "../data/slokas";
 import SlokaCard from "../components/SlokaCard";
 import gitaData from "../data/gita_700.json";
+
+// ── Stagger reveal variants for the daily hero ──────────────────────────────
+const heroContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.18, delayChildren: 0.05 } },
+};
+const heroItem = {
+  hidden: { opacity: 0, y: 10 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
+};
 
 const API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 
@@ -85,79 +96,112 @@ export default function HomePage() {
     <div className="page">
 
       {/* ── Daily Sloka Hero ── */}
-      <div className="daily-hero">
-        <div className="daily-date">
+      <motion.div
+        className="daily-hero"
+        variants={heroContainer}
+        initial="hidden"
+        animate="show"
+      >
+        <motion.div className="daily-date" variants={heroItem}>
           🕉 Sloka of the Day — {dateStr}
           <span style={{ marginLeft: "1rem", fontSize: "0.72rem", opacity: 0.6 }}>
             Day #{daily.dayNum} · Verse {daily.ch}.{daily.v}
           </span>
-        </div>
+        </motion.div>
 
         {/* Sanskrit */}
-        <pre className="daily-sanskrit">{daily.sanskrit}</pre>
+        <motion.pre className="daily-sanskrit" variants={heroItem}>{daily.sanskrit}</motion.pre>
 
         {/* Hindi */}
-        <div style={{
-          fontFamily: "'Noto Sans Devanagari', sans-serif",
-          fontSize: "0.98rem", lineHeight: 1.85,
-          color: "rgba(212,245,238,0.82)",
-          marginBottom: "0.85rem",
-          padding: "0.75rem 1rem",
-          background: "rgba(0,195,137,0.08)",
-          borderRadius: "8px",
-          borderLeft: "3px solid rgba(0,195,137,0.4)",
-        }}>
+        <motion.div
+          variants={heroItem}
+          style={{
+            fontFamily: "'Noto Sans Devanagari', sans-serif",
+            fontSize: "0.98rem", lineHeight: 1.85,
+            color: "rgba(212,245,238,0.82)",
+            marginBottom: "0.85rem",
+            padding: "0.75rem 1rem",
+            background: "rgba(0,195,137,0.08)",
+            borderRadius: "8px",
+            borderLeft: "3px solid rgba(0,195,137,0.4)",
+          }}>
           {daily.hindi}
-        </div>
+        </motion.div>
 
         {/* English */}
-        <p className="daily-english">{daily.english}</p>
+        <motion.p className="daily-english" variants={heroItem}>{daily.english}</motion.p>
 
         {/* Ref */}
-        <div className="daily-ref">— Bhagavad Gita {daily.ch}.{daily.v} · {ch?.name}</div>
+        <motion.div className="daily-ref" variants={heroItem}>— Bhagavad Gita {daily.ch}.{daily.v} · {ch?.name}</motion.div>
 
         {/* Expand button */}
-        <button
+        <motion.button
           className="btn"
+          variants={heroItem}
+          whileHover={{ y: -1 }}
+          whileTap={{ scale: 0.97 }}
           onClick={handleExpand}
           style={{ marginTop: "1rem", background: "rgba(0,195,137,0.12)", color: "var(--pk-aqua)", border: "1px solid rgba(0,195,137,0.3)" }}
         >
           {expanded ? "▲ Less" : "▼ More — Understanding & Krishna's Message"}
-        </button>
+        </motion.button>
 
         {/* Expanded details */}
-        {expanded && (
-          <div style={{ marginTop: "1.25rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
-            {daily.meaning && (
-              <div>
-                <p style={{ fontSize: "0.72rem", color: "var(--pk-green)", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "0.3rem" }}>💡 Understanding</p>
-                <p style={{ fontSize: "0.92rem", color: "rgba(212,245,238,0.75)", lineHeight: 1.75 }}>{daily.meaning}</p>
+        <AnimatePresence initial={false}>
+          {expanded && (
+            <motion.div
+              key="expanded-details"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.35, ease: "easeInOut" }}
+              style={{ overflow: "hidden" }}
+            >
+              <div style={{ marginTop: "1.25rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                {daily.meaning && (
+                  <div>
+                    <p style={{ fontSize: "0.72rem", color: "var(--pk-green)", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "0.3rem" }}>💡 Understanding</p>
+                    <p style={{ fontSize: "0.92rem", color: "rgba(212,245,238,0.75)", lineHeight: 1.75 }}>{daily.meaning}</p>
+                  </div>
+                )}
+                {daily.life && (
+                  <div>
+                    <p style={{ fontSize: "0.72rem", color: "var(--pk-green)", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "0.3rem" }}>🌱 Life Application</p>
+                    <p style={{ fontSize: "0.92rem", color: "rgba(212,245,238,0.75)", lineHeight: 1.75 }}>{daily.life}</p>
+                  </div>
+                )}
+                <div style={{ padding: "0.75rem 1rem", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)", borderRadius: "8px", minHeight: "3rem" }}>
+                  {krishnaLoading
+                    ? (
+                      <motion.p
+                        animate={{ opacity: [0.5, 1, 0.5] }}
+                        transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+                        style={{ fontSize: "0.85rem", color: "rgba(212,175,55,0.7)", fontStyle: "italic" }}
+                      >
+                        🪷 Krishna is speaking...
+                      </motion.p>
+                    )
+                    : <p style={{ fontSize: "0.9rem", fontStyle: "italic", color: "#F5C842", lineHeight: 1.7 }}>🪷 {krishnaMsg || daily.krishna}</p>
+                  }
+                </div>
               </div>
-            )}
-            {daily.life && (
-              <div>
-                <p style={{ fontSize: "0.72rem", color: "var(--pk-green)", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "0.3rem" }}>🌱 Life Application</p>
-                <p style={{ fontSize: "0.92rem", color: "rgba(212,245,238,0.75)", lineHeight: 1.75 }}>{daily.life}</p>
-              </div>
-            )}
-            <div style={{ padding: "0.75rem 1rem", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)", borderRadius: "8px", minHeight: "3rem" }}>
-              {krishnaLoading
-                ? <p style={{ fontSize: "0.85rem", color: "rgba(212,175,55,0.5)", fontStyle: "italic" }}>🪷 Krishna is speaking...</p>
-                : <p style={{ fontSize: "0.9rem", fontStyle: "italic", color: "#F5C842", lineHeight: 1.7 }}>🪷 {krishnaMsg || daily.krishna}</p>
-              }
-            </div>
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Save button */}
-        <button
+        <motion.button
           className="btn"
+          variants={heroItem}
+          whileTap={{ scale: 0.9 }}
+          animate={liked ? { scale: [1, 1.25, 1] } : { scale: 1 }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
           onClick={() => setLiked(l => !l)}
           style={{ marginTop: "2.5rem", background: liked ? "rgba(0,195,137,0.2)" : "rgba(255,255,255,0.08)", color: "#fff", border: "1px solid rgba(255,255,255,0.2)" }}
         >
           {liked ? "♥ Saved" : "♡ Save this sloka"}
-        </button>
-      </div>
+        </motion.button>
+      </motion.div>
 
       {/* ── Key Slokas ── */}
       <h2 className="section-title">Key Slokas</h2>
