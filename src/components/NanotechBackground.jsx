@@ -182,23 +182,26 @@ export default function NanotechBackground({ bgActive = false }) {
 
   return (
     <>
-      {/* Video background — starts only after loading sequence ends */}
-      <video
-        ref={videoRef}
-        loop
-        muted
-        playsInline
-        style={{
-          position: "fixed", top: 0, left: 0,
-          width: "100%", height: "100%",
-          objectFit: "cover",
-          opacity: 0.22,
-          zIndex: 0,
-          pointerEvents: "none",
-        }}
-      >
-        <source src="/nanotech-bg.mp4" type="video/mp4" />
-      </video>
+      {/* Video background — crop bottom to hide Gemini watermark */}
+      <div style={{
+        position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+        overflow: "hidden", zIndex: 0, pointerEvents: "none",
+      }}>
+        <video
+          ref={videoRef}
+          loop
+          muted
+          playsInline
+          style={{
+            position: "absolute", top: 0, left: 0,
+            width: "100%", height: "112%",
+            objectFit: "cover", objectPosition: "top center",
+            opacity: 0.22,
+          }}
+        >
+          <source src="/nanotech-bg.mp4" type="video/mp4" />
+        </video>
+      </div>
       {/* Particle / hex grid canvas overlay */}
       <canvas
         ref={canvasRef}
