@@ -194,7 +194,7 @@ export default function NanotechBackground({ bgActive = false }) {
           playsInline
           style={{
             position: "absolute", top: 0, left: 0,
-            width: "100%", height: "112%",
+            width: "100%", height: "130%",
             objectFit: "cover", objectPosition: "top center",
             opacity: 0.22,
           }}
