@@ -9,20 +9,26 @@ const SPEED = 0.22;          // base speed — always moving
 const ANGLE_DRIFT = 0.006;   // how much each particle's direction drifts per frame
 const CONNECT_DIST = 135;
 
-export default function NanotechBackground() {
+export default function NanotechBackground({ bgActive = false }) {
   const canvasRef = useRef();
+  const videoRef = useRef();
   const mouse = useRef({ x: -1000, y: -1000 });
   const particles = useRef([]);
   const rafRef = useRef();
-  const peacockImg = useRef(null);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (bgActive) {
+      v.play().catch(() => {});
+    } else {
+      v.pause();
+    }
+  }, [bgActive]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-
-    const img = new Image();
-    img.src = "/peacock-bg.png";
-    img.onload = () => { peacockImg.current = img; };
 
     function resize() {
       canvas.width  = window.innerWidth;
@@ -78,67 +84,6 @@ export default function NanotechBackground() {
 
       hexGrid(ctx, W, H);
 
-      // Peacock feather — drawn directly on canvas with screen blend (no box)
-      if (peacockImg.current) {
-        const t = Date.now() * 0.0005;
-        const imgW = peacockImg.current.naturalWidth;
-        const imgH = peacockImg.current.naturalHeight;
-        const aspect = imgW / imgH;
-        const drawH = H;
-        const drawW = drawH * aspect;
-        const px = W / 2 - drawW / 2;
-        const py = 0;
-        // Draw feather into offscreen canvas with full edge-fade mask
-        const off = document.createElement("canvas");
-        off.width = W; off.height = H;
-        const octx = off.getContext("2d");
-
-        octx.globalAlpha = 0.32 + Math.sin(t) * 0.03;
-        octx.drawImage(peacockImg.current, px, py, drawW, drawH);
-
-        // Fade all 4 edges using destination-in gradients
-        octx.globalCompositeOperation = "destination-in";
-        const fadeW = drawW * 0.38; // how deep the fade goes from each side
-        const fadeH = H * 0.22;
-
-        // Left fade
-        const gl = octx.createLinearGradient(px, 0, px + fadeW, 0);
-        gl.addColorStop(0, "rgba(0,0,0,0)");
-        gl.addColorStop(1, "rgba(0,0,0,1)");
-        octx.fillStyle = gl; octx.fillRect(px, 0, fadeW, H);
-
-        // Right fade
-        const gr = octx.createLinearGradient(px + drawW, 0, px + drawW - fadeW, 0);
-        gr.addColorStop(0, "rgba(0,0,0,0)");
-        gr.addColorStop(1, "rgba(0,0,0,1)");
-        octx.fillStyle = gr; octx.fillRect(px + drawW - fadeW, 0, fadeW, H);
-
-        // Top fade
-        const gt = octx.createLinearGradient(0, 0, 0, fadeH);
-        gt.addColorStop(0, "rgba(0,0,0,0)");
-        gt.addColorStop(1, "rgba(0,0,0,1)");
-        octx.fillStyle = gt; octx.fillRect(0, 0, W, fadeH);
-
-        // Bottom fade
-        const gb = octx.createLinearGradient(0, H, 0, H - fadeH);
-        gb.addColorStop(0, "rgba(0,0,0,0)");
-        gb.addColorStop(1, "rgba(0,0,0,1)");
-        octx.fillStyle = gb; octx.fillRect(0, H - fadeH, W, fadeH);
-
-        // Center alpha preserved — rest of canvas already opaque from feather draw
-        // Fill non-feather areas as transparent
-        octx.globalCompositeOperation = "destination-atop";
-        octx.fillStyle = "rgba(0,0,0,0)";
-        if (px > 0) octx.fillRect(0, 0, px, H);
-        if (px + drawW < W) octx.fillRect(px + drawW, 0, W - px - drawW, H);
-
-        // Composite onto main canvas with screen blend
-        ctx.save();
-        ctx.globalCompositeOperation = "screen";
-        ctx.drawImage(off, 0, 0);
-        ctx.restore();
-      }
-
       // Mouse glow (visual only — no particle attraction)
       const mx = mouse.current.x;
       const my = mouse.current.y;
@@ -152,13 +97,6 @@ export default function NanotechBackground() {
         ctx.arc(mx, my, 160, 0, Math.PI * 2);
         ctx.fill();
 
-        // Peacock eye rings at cursor
-        ctx.beginPath(); ctx.arc(mx, my, 22, 0, Math.PI * 2);
-        ctx.strokeStyle = "rgba(0,195,137,0.45)"; ctx.lineWidth = 1; ctx.stroke();
-        ctx.beginPath(); ctx.arc(mx, my, 10, 0, Math.PI * 2);
-        ctx.strokeStyle = "rgba(61,214,200,0.35)"; ctx.lineWidth = 0.8; ctx.stroke();
-        ctx.beginPath(); ctx.arc(mx, my, 3, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(0,229,204,0.65)"; ctx.fill();
       }
 
       const ps = particles.current;
@@ -243,13 +181,33 @@ export default function NanotechBackground() {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        position: "fixed", top: 0, left: 0,
-        width: "100%", height: "100%",
-        pointerEvents: "none", zIndex: 0,
-      }}
-    />
+    <>
+      {/* Video background — starts only after loading sequence ends */}
+      <video
+        ref={videoRef}
+        loop
+        muted
+        playsInline
+        style={{
+          position: "fixed", top: 0, left: 0,
+          width: "100%", height: "100%",
+          objectFit: "cover",
+          opacity: 0.22,
+          zIndex: 0,
+          pointerEvents: "none",
+        }}
+      >
+        <source src="/nanotech-bg.mp4" type="video/mp4" />
+      </video>
+      {/* Particle / hex grid canvas overlay */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "fixed", top: 0, left: 0,
+          width: "100%", height: "100%",
+          pointerEvents: "none", zIndex: 0,
+        }}
+      />
+    </>
   );
 }
