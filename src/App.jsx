@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Navbar from "./components/Navbar";
 import NanotechBackground from "./components/NanotechBackground";
 import IntroScreen from "./components/IntroScreen";
+import NanotechAssembly from "./components/NanotechAssembly";
 import HomePage from "./pages/HomePage";
 import ExplorerPage from "./pages/ExplorerPage";
 import SearchPage from "./pages/SearchPage";
@@ -110,6 +111,7 @@ const isTouchDevice = () => window.matchMedia("(pointer: coarse)").matches;
 export default function App() {
   const [tab, setTab] = useState("home");
   const [introVisible, setIntroVisible] = useState(true);
+  const [assemblyVisible, setAssemblyVisible] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [isTouch] = useState(isTouchDevice);
   const [cursorPos, setCursorPos] = useState({ x: -200, y: -200 });
@@ -146,7 +148,13 @@ export default function App() {
 
   return (
     <>
-      {introVisible && <IntroScreen onDone={() => setIntroVisible(false)} />}
+      {introVisible && (
+        <IntroScreen
+          onLiftStart={() => setAssemblyVisible(true)}
+          onDone={() => setIntroVisible(false)}
+        />
+      )}
+      {assemblyVisible && <NanotechAssembly onDone={() => setAssemblyVisible(false)} />}
       <NanotechBackground />
 
       {/* Peacock feather cursor — desktop only, hidden when chat is open */}
@@ -163,7 +171,12 @@ export default function App() {
         background: "radial-gradient(ellipse at 20% 80%, rgba(123,79,212,0.07) 0%, transparent 50%), radial-gradient(ellipse at 80% 10%, rgba(0,195,137,0.06) 0%, transparent 50%)",
       }} />
 
-      <div style={{ position: "relative", zIndex: 1 }}>
+      <div style={{
+        position: "relative", zIndex: 1,
+        opacity: assemblyVisible ? 0 : 1,
+        transform: assemblyVisible ? "translateY(18px)" : "translateY(0)",
+        transition: assemblyVisible ? "none" : "opacity 1.2s ease 0.2s, transform 1.2s cubic-bezier(0.22,1,0.36,1) 0.2s",
+      }}>
         <Navbar active={tab} onChange={setTab} />
         {pages[tab]}
         <footer style={{

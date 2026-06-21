@@ -88,10 +88,54 @@ export default function NanotechBackground() {
         const drawW = drawH * aspect;
         const px = W / 2 - drawW / 2;
         const py = 0;
+        // Draw feather into offscreen canvas with full edge-fade mask
+        const off = document.createElement("canvas");
+        off.width = W; off.height = H;
+        const octx = off.getContext("2d");
+
+        octx.globalAlpha = 0.32 + Math.sin(t) * 0.03;
+        octx.drawImage(peacockImg.current, px, py, drawW, drawH);
+
+        // Fade all 4 edges using destination-in gradients
+        octx.globalCompositeOperation = "destination-in";
+        const fadeW = drawW * 0.38; // how deep the fade goes from each side
+        const fadeH = H * 0.22;
+
+        // Left fade
+        const gl = octx.createLinearGradient(px, 0, px + fadeW, 0);
+        gl.addColorStop(0, "rgba(0,0,0,0)");
+        gl.addColorStop(1, "rgba(0,0,0,1)");
+        octx.fillStyle = gl; octx.fillRect(px, 0, fadeW, H);
+
+        // Right fade
+        const gr = octx.createLinearGradient(px + drawW, 0, px + drawW - fadeW, 0);
+        gr.addColorStop(0, "rgba(0,0,0,0)");
+        gr.addColorStop(1, "rgba(0,0,0,1)");
+        octx.fillStyle = gr; octx.fillRect(px + drawW - fadeW, 0, fadeW, H);
+
+        // Top fade
+        const gt = octx.createLinearGradient(0, 0, 0, fadeH);
+        gt.addColorStop(0, "rgba(0,0,0,0)");
+        gt.addColorStop(1, "rgba(0,0,0,1)");
+        octx.fillStyle = gt; octx.fillRect(0, 0, W, fadeH);
+
+        // Bottom fade
+        const gb = octx.createLinearGradient(0, H, 0, H - fadeH);
+        gb.addColorStop(0, "rgba(0,0,0,0)");
+        gb.addColorStop(1, "rgba(0,0,0,1)");
+        octx.fillStyle = gb; octx.fillRect(0, H - fadeH, W, fadeH);
+
+        // Center alpha preserved — rest of canvas already opaque from feather draw
+        // Fill non-feather areas as transparent
+        octx.globalCompositeOperation = "destination-atop";
+        octx.fillStyle = "rgba(0,0,0,0)";
+        if (px > 0) octx.fillRect(0, 0, px, H);
+        if (px + drawW < W) octx.fillRect(px + drawW, 0, W - px - drawW, H);
+
+        // Composite onto main canvas with screen blend
         ctx.save();
         ctx.globalCompositeOperation = "screen";
-        ctx.globalAlpha = 0.28 + Math.sin(t) * 0.03;
-        ctx.drawImage(peacockImg.current, px, py, drawW, drawH);
+        ctx.drawImage(off, 0, 0);
         ctx.restore();
       }
 

@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 
-export default function IntroScreen({ onDone }) {
+export default function IntroScreen({ onLiftStart, onDone }) {
   const [phase, setPhase] = useState("enter");
 
   useEffect(() => {
     const t1 = setTimeout(() => setPhase("glow"),  2000);
-    const t2 = setTimeout(() => setPhase("lift"),  5500);
-    const t3 = setTimeout(() => { setPhase("done"); onDone(); }, 7500);
+    const t2 = setTimeout(() => { setPhase("lift"); onLiftStart?.(); }, 5500);
+    const t3 = setTimeout(() => { setPhase("done"); onDone(); }, 7800);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, []);
 

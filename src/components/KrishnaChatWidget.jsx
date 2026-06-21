@@ -54,6 +54,81 @@ const P_CHAT   = "chat";
 const LS_NAME   = "gita_user_name";
 const LS_GENDER = "gita_user_gender";
 
+function MiniIcon({ size = 22 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 22 22" fill="none" style={{ flexShrink: 0 }}>
+      <circle cx="11" cy="11" r="11" fill="#020c10"/>
+      {[0,30,60,90,120,150,180,210,240,270,300,330].map((deg,i) => (
+        <line key={i}
+          x1={11 + Math.cos(deg*Math.PI/180)*5.5}
+          y1={11 + Math.sin(deg*Math.PI/180)*5.5}
+          x2={11 + Math.cos(deg*Math.PI/180)*10}
+          y2={11 + Math.sin(deg*Math.PI/180)*10}
+          stroke={i%2===0?"#00C389":"#3DD6C8"} strokeWidth="0.8" opacity="0.75"
+        />
+      ))}
+      <circle cx="11" cy="11" r="5.5" fill="rgba(0,90,60,0.5)" stroke="#00C389" strokeWidth="0.9"/>
+      <circle cx="11" cy="11" r="3.5" fill="rgba(0,130,110,0.5)" stroke="#3DD6C8" strokeWidth="0.8"/>
+      <circle cx="11" cy="11" r="2" fill="rgba(20,55,200,0.9)" stroke="#4FC3F7" strokeWidth="0.6"/>
+      <circle cx="11" cy="11" r="0.9" fill="#D4AF37"/>
+      <ellipse cx="10.3" cy="10.3" rx="0.45" ry="0.5" fill="rgba(255,255,255,0.85)"/>
+    </svg>
+  );
+}
+
+function ChatIcon() {
+  return (
+    <svg width="68" height="78" viewBox="0 0 68 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* ── 3D Book ── */}
+      <path d="M10 52 L10 66 L14 70 L14 56 Z" fill="#7B3F00"/>
+      <path d="M10 52 L34 48 L34 62 L10 66 Z" fill="#F5E6C8"/>
+      <line x1="14" y1="54" x2="31" y2="51" stroke="#C9B08A" strokeWidth="0.7"/>
+      <line x1="14" y1="57" x2="31" y2="54" stroke="#C9B08A" strokeWidth="0.7"/>
+      <line x1="14" y1="60" x2="31" y2="57" stroke="#C9B08A" strokeWidth="0.7"/>
+      <line x1="14" y1="63" x2="31" y2="60" stroke="#C9B08A" strokeWidth="0.7"/>
+      <path d="M34 48 L58 52 L58 66 L34 62 Z" fill="#EDD9A3"/>
+      <line x1="37" y1="51" x2="54" y2="54" stroke="#C9B08A" strokeWidth="0.7"/>
+      <line x1="37" y1="54" x2="54" y2="57" stroke="#C9B08A" strokeWidth="0.7"/>
+      <line x1="37" y1="57" x2="54" y2="60" stroke="#C9B08A" strokeWidth="0.7"/>
+      <line x1="37" y1="60" x2="54" y2="63" stroke="#C9B08A" strokeWidth="0.7"/>
+      <path d="M10 66 L14 70 L58 70 L58 66 Z" fill="#5C2E00"/>
+      <path d="M58 52 L62 56 L62 70 L58 66 Z" fill="#8B5E3C"/>
+      <line x1="34" y1="48" x2="34" y2="62" stroke="#D4AF37" strokeWidth="1.2"/>
+      <path d="M10 52 L34 48 L58 52 L58 66 L10 66 Z" fill="none" stroke="#D4AF37" strokeWidth="0.8" opacity="0.5"/>
+
+      {/* ── SVG Peacock Feather ── */}
+      {/* Quill spine */}
+      <path d="M34 50 C34 48 33.8 36 33.5 22 C33.2 12 33.5 5 34 3" stroke="#a0ead8" strokeWidth="1.3" strokeLinecap="round"/>
+      {/* Barbs — row 1 */}
+      <path d="M33.8 44 C30 42 25 41 22 39" stroke="#00C389" strokeWidth="0.8" strokeLinecap="round" opacity="0.6"/>
+      <path d="M33.8 44 C37 42 42 41 45 39" stroke="#00C389" strokeWidth="0.8" strokeLinecap="round" opacity="0.6"/>
+      {/* Row 2 */}
+      <path d="M33.8 39 C28 36 20 34 16 31" stroke="#00A5B5" strokeWidth="0.9" strokeLinecap="round" opacity="0.7"/>
+      <path d="M33.8 39 C39 36 47 34 51 31" stroke="#00A5B5" strokeWidth="0.9" strokeLinecap="round" opacity="0.7"/>
+      {/* Row 3 */}
+      <path d="M33.8 33 C26 29 16 26 11 22" stroke="#3DD6C8" strokeWidth="1" strokeLinecap="round" opacity="0.8"/>
+      <path d="M33.8 33 C41 29 51 26 56 22" stroke="#3DD6C8" strokeWidth="1" strokeLinecap="round" opacity="0.8"/>
+      {/* Row 4 */}
+      <path d="M33.8 27 C25 22 14 18 9 13" stroke="#00C389" strokeWidth="1" strokeLinecap="round" opacity="0.85"/>
+      <path d="M33.8 27 C42 22 53 18 58 13" stroke="#00C389" strokeWidth="1" strokeLinecap="round" opacity="0.85"/>
+      {/* Row 5 */}
+      <path d="M33.8 20 C27 15 17 11 13 6" stroke="#4FC3F7" strokeWidth="0.9" strokeLinecap="round" opacity="0.8"/>
+      <path d="M33.8 20 C40 15 50 11 54 6" stroke="#4FC3F7" strokeWidth="0.9" strokeLinecap="round" opacity="0.8"/>
+      {/* Gold shimmer */}
+      <path d="M33.8 30 C27 26 20 23 16 19" stroke="#D4AF37" strokeWidth="0.5" strokeLinecap="round" opacity="0.5"/>
+      <path d="M33.8 30 C40 26 47 23 51 19" stroke="#D4AF37" strokeWidth="0.5" strokeLinecap="round" opacity="0.5"/>
+
+      {/* ── Eye / Ocellus ── */}
+      <ellipse cx="34" cy="11" rx="8.5" ry="10" fill="rgba(0,50,40,0.4)" stroke="#00A5B5" strokeWidth="0.8"/>
+      <ellipse cx="34" cy="11" rx="6.5" ry="7.5" fill="rgba(0,90,60,0.45)" stroke="#00C389" strokeWidth="1"/>
+      <ellipse cx="34" cy="11" rx="4.5" ry="5.2" fill="rgba(0,130,110,0.5)" stroke="#3DD6C8" strokeWidth="0.9"/>
+      <ellipse cx="34" cy="11" rx="2.8" ry="3.2" fill="rgba(20,55,200,0.9)" stroke="#4FC3F7" strokeWidth="0.7"/>
+      <ellipse cx="34" cy="11" rx="1.3" ry="1.5" fill="#D4AF37"/>
+      <ellipse cx="33" cy="9.8" rx="0.6" ry="0.7" fill="rgba(255,255,255,0.85)"/>
+    </svg>
+  );
+}
+
 export default function KrishnaChatWidget({ onOpenChange }) {
   const [open, setOpen] = useState(false);
 
@@ -183,28 +258,41 @@ export default function KrishnaChatWidget({ onOpenChange }) {
         .kw-msgs::-webkit-scrollbar-thumb { background:rgba(212,175,55,0.2); border-radius:2px; }
       `}</style>
 
-      {/* Floating button */}
-      <button
-        onClick={() => toggleOpen(!open)}
-        onMouseEnter={handleMouseEnterChat}
-        onMouseLeave={handleMouseLeaveChat}
-        title="Krishna Sakha"
-        style={{
-          position: "fixed", bottom: "1.5rem", right: "1.5rem",
-          zIndex: 9998,
-          width: 56, height: 56, borderRadius: "50%",
-          border: "2px solid rgba(212,175,55,0.6)",
-          padding: 0, overflow: "hidden", cursor: "pointer",
-          boxShadow: open
-            ? "0 0 0 4px rgba(212,175,55,0.2), 0 8px 32px rgba(0,0,0,0.6)"
-            : "0 0 20px rgba(212,175,55,0.4), 0 4px 20px rgba(0,0,0,0.5)",
-          transition: "box-shadow 0.3s, transform 0.2s",
-          transform: open ? "scale(0.95)" : "scale(1)",
-          background: "#000",
-        }}
-      >
-        <img src="/chatbot-icon.png" alt="Krishna" style={{ width: "100%", height: "100%", objectFit: "cover" }}/>
-      </button>
+      {/* Floating button + label — hidden when chat is open */}
+      {!open && <div style={{
+        position: "fixed", bottom: "3.5rem", right: "1.2rem",
+        zIndex: 9998,
+        display: "flex", flexDirection: "column", alignItems: "center", gap: "4px",
+        cursor: "pointer",
+      }} onClick={() => toggleOpen(!open)} onMouseEnter={handleMouseEnterChat} onMouseLeave={handleMouseLeaveChat}>
+        <button
+          title="Krishna Sakha"
+          style={{
+            width: 68, height: 78, borderRadius: "16px",
+            border: "none", padding: 0, cursor: "pointer",
+            background: "linear-gradient(160deg, #0a1a14 0%, #020c10 100%)",
+            boxShadow: open
+              ? "0 0 0 3px rgba(212,175,55,0.3), 0 8px 32px rgba(0,0,0,0.7)"
+              : "0 0 18px rgba(212,175,55,0.35), 0 0 8px rgba(0,195,137,0.2), 0 6px 20px rgba(0,0,0,0.6)",
+            transition: "box-shadow 0.3s, transform 0.2s",
+            transform: open ? "scale(0.95)" : "scale(1)",
+            overflow: "hidden",
+          }}
+        >
+          <ChatIcon />
+        </button>
+        {/* Label */}
+        <span style={{
+          fontSize: "0.62rem",
+          fontFamily: "'Rajdhani', sans-serif",
+          fontWeight: 700,
+          letterSpacing: "0.08em",
+          color: "rgba(212,175,55,0.85)",
+          textShadow: "0 0 8px rgba(212,175,55,0.4)",
+          whiteSpace: "nowrap",
+          userSelect: "none",
+        }}>apka SAKHA</span>
+      </div>}
 
       {/* Chat panel */}
       {open && (
@@ -216,7 +304,7 @@ export default function KrishnaChatWidget({ onOpenChange }) {
           zIndex: 9997,
           width: 340, height: 480,
           background: "linear-gradient(180deg, #010e14 0%, #020c10 100%)",
-          border: "1px solid rgba(212,175,55,0.22)",
+          border: "none",
           borderRadius: "16px",
           boxShadow: "0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(212,175,55,0.1)",
           display: "flex", flexDirection: "column",
@@ -227,11 +315,11 @@ export default function KrishnaChatWidget({ onOpenChange }) {
           <div style={{
             padding: "0.75rem 1rem",
             background: "rgba(0,0,0,0.4)",
-            borderBottom: "1px solid rgba(212,175,55,0.15)",
+            borderBottom: "none",
             display: "flex", alignItems: "center", gap: "0.6rem",
             flexShrink: 0,
           }}>
-            <img src="/chatbot-icon.png" style={{ width:32, height:32, borderRadius:"50%", border:"1.5px solid rgba(212,175,55,0.5)", objectFit:"cover" }}/>
+            <MiniIcon size={32} />
             <div>
               <div style={{ fontFamily:"'Rajdhani',sans-serif", fontSize:"0.95rem", fontWeight:700, color:"#D4AF37", letterSpacing:"0.04em" }}>
                 Krishna — तुम्हारा सखा
@@ -248,7 +336,7 @@ export default function KrishnaChatWidget({ onOpenChange }) {
             {messages.map((msg, i) => (
               <div key={msg.id || i} className="kw-msg" style={{ display:"flex", justifyContent: msg.from==="u" ? "flex-end" : "flex-start", gap:"0.4rem", alignItems:"flex-end" }}>
                 {msg.from === "k" && (
-                  <img src="/chatbot-icon.png" style={{ width:22, height:22, borderRadius:"50%", border:"1px solid rgba(212,175,55,0.35)", objectFit:"cover", flexShrink:0 }}/>
+                  <MiniIcon size={22} />
                 )}
                 <div style={{
                   maxWidth:"80%",
@@ -257,7 +345,7 @@ export default function KrishnaChatWidget({ onOpenChange }) {
                   background: msg.from==="u"
                     ? "linear-gradient(135deg,rgba(0,195,137,0.18),rgba(0,165,181,0.1))"
                     : "linear-gradient(135deg,rgba(212,175,55,0.12),rgba(212,175,55,0.05))",
-                  border: msg.from==="u" ? "1px solid rgba(0,195,137,0.28)" : "1px solid rgba(212,175,55,0.18)",
+                  border: "none",
                   color: msg.from==="u" ? "#d4f5ea" : "#f0e0a8",
                   fontSize:"0.8rem", lineHeight:1.65, whiteSpace:"pre-wrap",
                   fontFamily: /[ऀ-ॿ]/.test(msg.text||"") ? "'Noto Sans Devanagari',sans-serif" : "inherit",
@@ -269,8 +357,8 @@ export default function KrishnaChatWidget({ onOpenChange }) {
 
             {loading && (
               <div className="kw-msg" style={{ display:"flex", gap:"0.4rem", alignItems:"flex-end" }}>
-                <img src="/chatbot-icon.png" style={{ width:22,height:22,borderRadius:"50%",border:"1px solid rgba(212,175,55,0.35)",objectFit:"cover" }}/>
-                <div style={{ padding:"0.5rem 0.75rem", borderRadius:"14px 14px 14px 3px", background:"rgba(212,175,55,0.08)", border:"1px solid rgba(212,175,55,0.15)", display:"flex", gap:3, alignItems:"center" }}>
+                <MiniIcon size={22} />
+                <div style={{ padding:"0.5rem 0.75rem", borderRadius:"14px 14px 14px 3px", background:"rgba(212,175,55,0.08)", border:"none", display:"flex", gap:3, alignItems:"center" }}>
                   {[0,1,2].map(i => <div key={i} style={{ width:5,height:5,borderRadius:"50%",background:"#D4AF37",animation:`dot 1.2s ease-in-out ${i*0.2}s infinite` }}/>)}
                 </div>
               </div>
@@ -281,7 +369,7 @@ export default function KrishnaChatWidget({ onOpenChange }) {
               <div className="kw-msg" style={{ display:"flex", gap:"0.5rem", paddingLeft:"1.8rem" }}>
                 {[["sakha","⚡ Sakha"],["sakhi","🌸 Sakhi"]].map(([val,label]) => (
                   <button key={val} onClick={() => handleGenderSelect(val)} style={{
-                    padding:"0.4rem 0.9rem", background:"rgba(212,175,55,0.1)", border:"1px solid rgba(212,175,55,0.35)",
+                    padding:"0.4rem 0.9rem", background:"rgba(212,175,55,0.1)", border:"none",
                     borderRadius:"999px", color:"#D4AF37", fontSize:"0.78rem", cursor:"pointer",
                     fontFamily:"'Rajdhani',sans-serif", fontWeight:600, letterSpacing:"0.04em",
                   }}>{label}</button>
@@ -293,7 +381,7 @@ export default function KrishnaChatWidget({ onOpenChange }) {
 
           {/* Input */}
           {(phase === P_NAME || phase === P_CHAT) && (
-            <div style={{ padding:"0.65rem 0.85rem", borderTop:"1px solid rgba(212,175,55,0.12)", background:"rgba(0,0,0,0.3)", display:"flex", gap:"0.5rem", flexShrink:0 }}>
+            <div style={{ padding:"0.65rem 0.85rem", borderTop:"none", background:"rgba(0,0,0,0.3)", display:"flex", gap:"0.5rem", flexShrink:0 }}>
               <input
                 className="kw-input"
                 value={input}
