@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const COLORS = [
   "#00C389","#00A5B5","#3DD6C8","#7B4FD4","#00E5CC","#4FC3F7","#A5F3A0",
@@ -14,10 +14,15 @@ export default function NanotechBackground() {
   const mouse = useRef({ x: -1000, y: -1000 });
   const particles = useRef([]);
   const rafRef = useRef();
+  const peacockImg = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
+
+    const img = new Image();
+    img.src = "/peacock-bg.png";
+    img.onload = () => { peacockImg.current = img; };
 
     function resize() {
       canvas.width  = window.innerWidth;
@@ -72,6 +77,23 @@ export default function NanotechBackground() {
       ctx.clearRect(0, 0, W, H);
 
       hexGrid(ctx, W, H);
+
+      // Peacock feather — drawn directly on canvas with screen blend (no box)
+      if (peacockImg.current) {
+        const t = Date.now() * 0.0005;
+        const imgW = peacockImg.current.naturalWidth;
+        const imgH = peacockImg.current.naturalHeight;
+        const aspect = imgW / imgH;
+        const drawH = H;
+        const drawW = drawH * aspect;
+        const px = W / 2 - drawW / 2;
+        const py = 0;
+        ctx.save();
+        ctx.globalCompositeOperation = "screen";
+        ctx.globalAlpha = 0.28 + Math.sin(t) * 0.03;
+        ctx.drawImage(peacockImg.current, px, py, drawW, drawH);
+        ctx.restore();
+      }
 
       // Mouse glow (visual only — no particle attraction)
       const mx = mouse.current.x;
