@@ -356,6 +356,12 @@ body {
   .nav-brand { border-right: none; margin-right: 0; }
 }
 
+/* Hide default cursor on desktop — peacock feather replaces it */
+@media (pointer: fine) {
+  body { cursor: none; }
+  input, textarea, select, button { cursor: auto; }
+}
+
 /* ── LAYOUT ── */
 .page {
   max-width: 1200px;

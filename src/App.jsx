@@ -1,6 +1,62 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "./components/Navbar";
 import NanotechBackground from "./components/NanotechBackground";
+
+function PeacockCursor({ x, y }) {
+  return (
+    <svg
+      style={{
+        position: "fixed",
+        left: x - 30, top: y - 148,
+        pointerEvents: "none", zIndex: 9999,
+        filter: "drop-shadow(0 0 5px rgba(0,195,137,0.9)) drop-shadow(0 0 12px rgba(61,214,200,0.5))",
+      }}
+      width="60" height="150" viewBox="0 0 60 150" fill="none"
+    >
+      <path d="M30 148 C30 148 30 120 30 90 C30 65 30 45 30 32" stroke="#a0ead8" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M30 108 C25 105 20 103 17 100" stroke="#00C389" strokeWidth="0.7" strokeLinecap="round" opacity="0.55"/>
+      <path d="M30 108 C35 105 40 103 43 100" stroke="#00C389" strokeWidth="0.7" strokeLinecap="round" opacity="0.55"/>
+      <path d="M30 98 C22 94 13 91 9 87"  stroke="#00A5B5" strokeWidth="0.85" strokeLinecap="round" opacity="0.65"/>
+      <path d="M30 98 C38 94 47 91 51 87" stroke="#00A5B5" strokeWidth="0.85" strokeLinecap="round" opacity="0.65"/>
+      <path d="M30 88 C19 83 8 79 4 73"   stroke="#3DD6C8" strokeWidth="0.9" strokeLinecap="round" opacity="0.75"/>
+      <path d="M30 88 C41 83 52 79 56 73" stroke="#3DD6C8" strokeWidth="0.9" strokeLinecap="round" opacity="0.75"/>
+      <path d="M30 78 C17 72 5 67 1 60"   stroke="#00C389" strokeWidth="1"   strokeLinecap="round" opacity="0.82"/>
+      <path d="M30 78 C43 72 55 67 59 60" stroke="#00C389" strokeWidth="1"   strokeLinecap="round" opacity="0.82"/>
+      <path d="M30 68 C16 61 3 55 0 47"   stroke="#4FC3F7" strokeWidth="1.1" strokeLinecap="round" opacity="0.88"/>
+      <path d="M30 68 C44 61 57 55 60 47" stroke="#4FC3F7" strokeWidth="1.1" strokeLinecap="round" opacity="0.88"/>
+      <path d="M30 58 C15 50 2 43 0 34"   stroke="#7B4FD4" strokeWidth="1.1" strokeLinecap="round" opacity="0.9"/>
+      <path d="M30 58 C45 50 58 43 60 34" stroke="#7B4FD4" strokeWidth="1.1" strokeLinecap="round" opacity="0.9"/>
+      <path d="M30 46 C18 40 8 33 6 24"   stroke="#3DD6C8" strokeWidth="1"   strokeLinecap="round" opacity="0.85"/>
+      <path d="M30 46 C42 40 52 33 54 24" stroke="#3DD6C8" strokeWidth="1"   strokeLinecap="round" opacity="0.85"/>
+      <path d="M30 34 C23 29 17 22 16 14" stroke="#00C389" strokeWidth="0.8" strokeLinecap="round" opacity="0.7"/>
+      <path d="M30 34 C37 29 43 22 44 14" stroke="#00C389" strokeWidth="0.8" strokeLinecap="round" opacity="0.7"/>
+      <path d="M30 68 C21 63 12 58 7 52"  stroke="#D4AF37" strokeWidth="0.45" strokeLinecap="round" opacity="0.45"/>
+      <path d="M30 68 C39 63 48 58 53 52" stroke="#D4AF37" strokeWidth="0.45" strokeLinecap="round" opacity="0.45"/>
+      <ellipse cx="30" cy="22" rx="14" ry="17" fill="rgba(0,60,50,0.25)" stroke="#00A5B5" strokeWidth="0.8" opacity="0.7"/>
+      <ellipse cx="30" cy="22" rx="11" ry="13" fill="rgba(0,100,70,0.3)"  stroke="#00C389" strokeWidth="1"/>
+      <ellipse cx="30" cy="22" rx="7.5" ry="9"  fill="rgba(0,140,120,0.35)" stroke="#3DD6C8" strokeWidth="0.9"/>
+      <ellipse cx="30" cy="22" rx="4.5" ry="5.5" fill="rgba(20,60,200,0.75)" stroke="#4FC3F7" strokeWidth="0.7"/>
+      <ellipse cx="30" cy="22" rx="2"   ry="2.4" fill="#D4AF37"/>
+      <ellipse cx="28" cy="20" rx="0.9" ry="1.1" fill="rgba(255,255,255,0.8)"/>
+    </svg>
+  );
+}
+
+function TrailDot({ x, y, opacity }) {
+  return (
+    <div style={{
+      position: "fixed", left: x, top: y,
+      width: 5, height: 5, borderRadius: "50%",
+      background: "radial-gradient(circle, #3DD6C8, #00C389)",
+      boxShadow: "0 0 6px #00C389",
+      transform: "translate(-50%, -50%)",
+      pointerEvents: "none", zIndex: 9997,
+      opacity, transition: "opacity 0.3s",
+    }} />
+  );
+}
+
+const isTouchDevice = () => window.matchMedia("(pointer: coarse)").matches;
 import IntroScreen from "./components/IntroScreen";
 import NanotechAssembly from "./components/NanotechAssembly";
 import HomePage from "./pages/HomePage";
@@ -16,6 +72,20 @@ export default function App() {
   const [introVisible, setIntroVisible] = useState(true);
   const [assemblyVisible, setAssemblyVisible] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [isTouch] = useState(isTouchDevice);
+  const [cursorPos, setCursorPos] = useState({ x: -200, y: -200 });
+  const [trail, setTrail] = useState([]);
+  const trailRef = useRef([]);
+
+  useEffect(() => {
+    const onMove = (e) => {
+      setCursorPos({ x: e.clientX, y: e.clientY });
+      trailRef.current = [{ x: e.clientX, y: e.clientY, id: Date.now() }, ...trailRef.current.slice(0, 5)];
+      setTrail([...trailRef.current]);
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
 
   const pages = {
     home:      <HomePage />,
@@ -36,6 +106,11 @@ export default function App() {
       )}
       {assemblyVisible && <NanotechAssembly onDone={() => setAssemblyVisible(false)} />}
       <NanotechBackground bgActive={!assemblyVisible && !introVisible} />
+
+      {!isTouch && !chatOpen && <PeacockCursor x={cursorPos.x} y={cursorPos.y} />}
+      {!isTouch && trail.map((t, i) => (
+        <TrailDot key={t.id} x={t.x} y={t.y} opacity={(1 - i / trail.length) * 0.55} />
+      ))}
 
       {/* Subtle gradient overlay */}
       <div style={{
