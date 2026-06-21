@@ -148,6 +148,7 @@ import MapPage from "./pages/MapPage";
 import BookPage from "./pages/BookPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import KrishnaChatWidget from "./components/KrishnaChatWidget";
+import KrishnaDarshan from "./components/KrishnaDarshan";
 
 export default function App() {
   const [tab, setTab] = useState("home");
@@ -244,6 +245,7 @@ export default function App() {
       </div>
 
       <KrishnaChatWidget onOpenChange={setChatOpen} />
+      <KrishnaDarshan />
     </>
   );
 }
