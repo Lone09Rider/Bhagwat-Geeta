@@ -69,9 +69,9 @@ export default function MapPage() {
               <div style={{ display: "flex", gap: "0.75rem" }}>
                 <span style={{ fontSize: "1.6rem", fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, color, lineHeight: 1, flexShrink: 0 }}>{ch.num}</span>
                 <div>
-                  <p style={{ fontWeight: 600, fontSize: "0.9rem", color: "#d4f5ee", marginBottom: "0.2rem" }}>{ch.name}</p>
-                  <p className="devanagari" style={{ fontSize: "0.78rem", color: "var(--pk-aqua)", marginBottom: "0.35rem", opacity: 0.75 }}>{ch.dev}</p>
-                  <p style={{ fontSize: "0.8rem", color: "rgba(212,245,238,0.6)", lineHeight: 1.6 }}>{ch.desc}</p>
+                  <p style={{ fontWeight: 700, fontSize: "0.95rem", color, marginBottom: "0.15rem", letterSpacing: "0.02em" }}>{ch.name}</p>
+                  <p className="devanagari" style={{ fontSize: "0.78rem", color: "rgba(212,245,238,0.55)", marginBottom: "0.35rem" }}>{ch.dev}</p>
+                  <p style={{ fontSize: "0.8rem", color: "rgba(212,245,238,0.75)", lineHeight: 1.6 }}>{ch.desc}</p>
                   <span style={{ fontSize: "0.75rem", color, marginTop: "0.3rem", display: "block", fontWeight: 600 }}>{ch.slokas} slokas</span>
                 </div>
               </div>
