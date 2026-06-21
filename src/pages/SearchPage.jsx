@@ -202,38 +202,47 @@ export default function SearchPage() {
                 key={theme.id}
                 onClick={() => setActivePortal(theme)}
                 style={{
-                  background: `linear-gradient(135deg, ${accent}12, ${accent}06)`,
-                  border: `1px solid ${accent}40`,
+                  background: `linear-gradient(145deg, rgba(4,22,32,0.88) 0%, ${accent}22 100%)`,
+                  border: `1px solid ${accent}66`,
                   borderRadius: "14px",
                   padding: "1.25rem 1rem",
                   cursor: "pointer",
                   display: "flex", flexDirection: "column", alignItems: "center", gap: "0.6rem",
-                  transition: "transform 0.18s, box-shadow 0.18s, border-color 0.18s",
+                  transition: "transform 0.18s, box-shadow 0.18s, border-color 0.18s, background 0.18s",
                   position: "relative", overflow: "hidden",
+                  boxShadow: `0 2px 16px rgba(0,0,0,0.45), 0 0 0 0 ${accent}`,
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.transform = "translateY(-4px) scale(1.03)";
-                  e.currentTarget.style.boxShadow = `0 8px 32px ${accent}44`;
+                  e.currentTarget.style.transform = "translateY(-5px) scale(1.04)";
+                  e.currentTarget.style.boxShadow = `0 10px 36px ${accent}55, 0 0 20px ${accent}22`;
                   e.currentTarget.style.borderColor = accent;
+                  e.currentTarget.style.background = `linear-gradient(145deg, ${accent}28 0%, rgba(4,22,32,0.9) 100%)`;
                 }}
                 onMouseLeave={e => {
                   e.currentTarget.style.transform = "";
-                  e.currentTarget.style.boxShadow = "";
-                  e.currentTarget.style.borderColor = `${accent}40`;
+                  e.currentTarget.style.boxShadow = `0 2px 16px rgba(0,0,0,0.45)`;
+                  e.currentTarget.style.borderColor = `${accent}66`;
+                  e.currentTarget.style.background = `linear-gradient(145deg, rgba(4,22,32,0.88) 0%, ${accent}22 100%)`;
                 }}
               >
                 {/* Shimmer sweep */}
                 <div style={{
                   position: "absolute", inset: 0, pointerEvents: "none",
-                  background: `linear-gradient(120deg, transparent 30%, ${accent}18 50%, transparent 70%)`,
-                  animation: `shimmer${i} ${3 + (i % 4) * 0.5}s ease-in-out ${(i * 0.15) % 2}s infinite`,
+                  background: `linear-gradient(110deg, transparent 20%, ${accent}33 50%, transparent 80%)`,
+                  animation: `shimmer${i} ${2.5 + (i % 4) * 0.6}s ease-in-out ${(i * 0.18) % 2.2}s infinite`,
                 }} />
                 <style>{`
                   @keyframes shimmer${i} {
-                    0%,100% { opacity: 0; transform: translateX(-100%); }
-                    50% { opacity: 1; transform: translateX(100%); }
+                    0%,100% { opacity: 0; transform: translateX(-120%); }
+                    45%,55% { opacity: 1; transform: translateX(120%); }
                   }
                 `}</style>
+                {/* Corner accent glow */}
+                <div style={{
+                  position: "absolute", bottom: 0, right: 0,
+                  width: 60, height: 60, pointerEvents: "none",
+                  background: `radial-gradient(circle at bottom right, ${accent}30, transparent 70%)`,
+                }} />
 
                 <span style={{ fontSize: "2rem", lineHeight: 1 }}>{theme.icon}</span>
                 <span style={{
