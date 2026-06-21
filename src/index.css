@@ -47,11 +47,7 @@ body {
   min-height: 100vh;
 }
 
-/* Hide default cursor on desktop only — peacock feather replaces it */
-@media (pointer: fine) {
-  body { cursor: none; }
-  input, textarea, select, button { cursor: auto; }
-}
+
 
 .devanagari { font-family: 'Noto Sans Devanagari', sans-serif; }
 
