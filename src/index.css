@@ -356,10 +356,9 @@ body {
   .nav-brand { border-right: none; margin-right: 0; }
 }
 
-/* Hide default cursor on desktop — peacock feather replaces it */
+/* Hide ALL cursors on desktop — peacock feather replaces everything */
 @media (pointer: fine) {
-  body { cursor: none; }
-  input, textarea, select, button { cursor: auto; }
+  *, *::before, *::after { cursor: none !important; }
 }
 
 /* ── LAYOUT ── */
