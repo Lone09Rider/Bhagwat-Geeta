@@ -56,6 +56,88 @@ function TrailDot({ x, y, opacity }) {
   );
 }
 
+// Pulsing glow at the quill tip
+function CursorTip({ x, y }) {
+  return (
+    <>
+      <style>{`
+        @keyframes tipPulse {
+          0%,100% { transform:translate(-50%,-50%) scale(1); opacity:0.9; }
+          50%      { transform:translate(-50%,-50%) scale(1.7); opacity:0.4; }
+        }
+        @keyframes tipRing {
+          0%   { transform:translate(-50%,-50%) scale(0.6); opacity:0.7; }
+          100% { transform:translate(-50%,-50%) scale(2.4); opacity:0; }
+        }
+      `}</style>
+      {/* Expanding ring */}
+      <div style={{
+        position: "fixed", left: x, top: y, pointerEvents: "none", zIndex: 9998,
+        width: 12, height: 12, borderRadius: "50%",
+        border: "1.5px solid #00E5CC",
+        animation: "tipRing 1.1s ease-out infinite",
+      }} />
+      {/* Core dot */}
+      <div style={{
+        position: "fixed", left: x, top: y, pointerEvents: "none", zIndex: 9998,
+        width: 6, height: 6, borderRadius: "50%",
+        background: "#D4AF37",
+        boxShadow: "0 0 8px #D4AF37, 0 0 16px rgba(212,175,55,0.6)",
+        animation: "tipPulse 1.4s ease-in-out infinite",
+      }} />
+    </>
+  );
+}
+
+// Click burst
+function ClickBurst({ x, y, id, onDone }) {
+  useEffect(() => {
+    const t = setTimeout(onDone, 700);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <>
+      <style>{`
+        @keyframes burstRing${id} {
+          0%   { transform:translate(-50%,-50%) scale(0); opacity:1; }
+          100% { transform:translate(-50%,-50%) scale(1); opacity:0; }
+        }
+        @keyframes burstSpark${id} {
+          0%   { opacity:1; transform:translate(-50%,-50%) scale(1); }
+          100% { opacity:0; transform:translate(-50%,-50%) scale(0); }
+        }
+      `}</style>
+      {/* 3 expanding rings */}
+      {[0,1,2].map(i => (
+        <div key={i} style={{
+          position: "fixed", left: x, top: y, pointerEvents: "none", zIndex: 10000,
+          width: `${(i+1)*40}px`, height: `${(i+1)*40}px`, borderRadius: "50%",
+          border: `${1.5 - i*0.4}px solid ${i===0?"#00E5CC":i===1?"#00C389":"#D4AF37"}`,
+          animation: `burstRing${id} ${0.45 + i*0.1}s cubic-bezier(0.22,1,0.36,1) ${i*0.06}s both`,
+        }} />
+      ))}
+      {/* 8 sparks radiating out */}
+      {Array.from({length:8}).map((_,i) => {
+        const angle = (i / 8) * Math.PI * 2;
+        const dist = 28;
+        return (
+          <div key={i} style={{
+            position: "fixed",
+            left: x + Math.cos(angle) * dist,
+            top:  y + Math.sin(angle) * dist,
+            pointerEvents: "none", zIndex: 10000,
+            width: 4, height: 4, borderRadius: "50%",
+            background: i % 2 === 0 ? "#00E5CC" : "#D4AF37",
+            boxShadow: `0 0 6px ${i%2===0?"#00C389":"#D4AF37"}`,
+            animation: `burstSpark${id} 0.5s ease-out ${i*0.03}s both`,
+          }} />
+        );
+      })}
+    </>
+  );
+}
+
 const isTouchDevice = () => window.matchMedia("(pointer: coarse)").matches;
 import IntroScreen from "./components/IntroScreen";
 import NanotechAssembly from "./components/NanotechAssembly";
@@ -75,6 +157,7 @@ export default function App() {
   const [isTouch] = useState(isTouchDevice);
   const [cursorPos, setCursorPos] = useState({ x: -200, y: -200 });
   const [trail, setTrail] = useState([]);
+  const [bursts, setBursts] = useState([]);
   const trailRef = useRef([]);
 
   useEffect(() => {
@@ -83,8 +166,15 @@ export default function App() {
       trailRef.current = [{ x: e.clientX, y: e.clientY, id: Date.now() }, ...trailRef.current.slice(0, 5)];
       setTrail([...trailRef.current]);
     };
+    const onClick = (e) => {
+      setBursts(b => [...b, { x: e.clientX, y: e.clientY, id: Date.now() }]);
+    };
     window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
+    window.addEventListener("click", onClick);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("click", onClick);
+    };
   }, []);
 
   const pages = {
@@ -108,8 +198,13 @@ export default function App() {
       <NanotechBackground bgActive={!assemblyVisible && !introVisible} />
 
       {!isTouch && !chatOpen && <PeacockCursor x={cursorPos.x} y={cursorPos.y} />}
+      {!isTouch && <CursorTip x={cursorPos.x} y={cursorPos.y} />}
       {!isTouch && trail.map((t, i) => (
         <TrailDot key={t.id} x={t.x} y={t.y} opacity={(1 - i / trail.length) * 0.55} />
+      ))}
+      {!isTouch && bursts.map(b => (
+        <ClickBurst key={b.id} x={b.x} y={b.y} id={b.id}
+          onDone={() => setBursts(prev => prev.filter(p => p.id !== b.id))} />
       ))}
 
       {/* Subtle gradient overlay */}
