@@ -203,7 +203,7 @@ export default function KrishnaChatWidget({ onOpenChange }) {
           background: "#000",
         }}
       >
-        <img src="/krishna-icon.png" alt="Krishna" style={{ width: "100%", height: "100%", objectFit: "cover" }}/>
+        <img src="/chatbot-icon.png" alt="Krishna" style={{ width: "100%", height: "100%", objectFit: "cover" }}/>
       </button>
 
       {/* Chat panel */}
@@ -231,7 +231,7 @@ export default function KrishnaChatWidget({ onOpenChange }) {
             display: "flex", alignItems: "center", gap: "0.6rem",
             flexShrink: 0,
           }}>
-            <img src="/krishna-icon.png" style={{ width:32, height:32, borderRadius:"50%", border:"1.5px solid rgba(212,175,55,0.5)", objectFit:"cover" }}/>
+            <img src="/chatbot-icon.png" style={{ width:32, height:32, borderRadius:"50%", border:"1.5px solid rgba(212,175,55,0.5)", objectFit:"cover" }}/>
             <div>
               <div style={{ fontFamily:"'Rajdhani',sans-serif", fontSize:"0.95rem", fontWeight:700, color:"#D4AF37", letterSpacing:"0.04em" }}>
                 Krishna — तुम्हारा सखा
@@ -248,7 +248,7 @@ export default function KrishnaChatWidget({ onOpenChange }) {
             {messages.map((msg, i) => (
               <div key={msg.id || i} className="kw-msg" style={{ display:"flex", justifyContent: msg.from==="u" ? "flex-end" : "flex-start", gap:"0.4rem", alignItems:"flex-end" }}>
                 {msg.from === "k" && (
-                  <img src="/krishna-icon.png" style={{ width:22, height:22, borderRadius:"50%", border:"1px solid rgba(212,175,55,0.35)", objectFit:"cover", flexShrink:0 }}/>
+                  <img src="/chatbot-icon.png" style={{ width:22, height:22, borderRadius:"50%", border:"1px solid rgba(212,175,55,0.35)", objectFit:"cover", flexShrink:0 }}/>
                 )}
                 <div style={{
                   maxWidth:"80%",
@@ -269,7 +269,7 @@ export default function KrishnaChatWidget({ onOpenChange }) {
 
             {loading && (
               <div className="kw-msg" style={{ display:"flex", gap:"0.4rem", alignItems:"flex-end" }}>
-                <img src="/krishna-icon.png" style={{ width:22,height:22,borderRadius:"50%",border:"1px solid rgba(212,175,55,0.35)",objectFit:"cover" }}/>
+                <img src="/chatbot-icon.png" style={{ width:22,height:22,borderRadius:"50%",border:"1px solid rgba(212,175,55,0.35)",objectFit:"cover" }}/>
                 <div style={{ padding:"0.5rem 0.75rem", borderRadius:"14px 14px 14px 3px", background:"rgba(212,175,55,0.08)", border:"1px solid rgba(212,175,55,0.15)", display:"flex", gap:3, alignItems:"center" }}>
                   {[0,1,2].map(i => <div key={i} style={{ width:5,height:5,borderRadius:"50%",background:"#D4AF37",animation:`dot 1.2s ease-in-out ${i*0.2}s infinite` }}/>)}
                 </div>
