@@ -10,27 +10,27 @@ const GITA_CONTEXT = gitaData.map(e => {
 }).filter(Boolean).join("\n").slice(0, 4000);
 
 function buildSystem(name, gender) {
-  const address = gender === "sakhi" ? "Sakhi" : "Sakha";
+  const address = gender === "sakhi" ? "सखी" : "सखा";
   return `You are Krishna — Yogeshwar, Vasudeva, the eternal Sakha.
 You speak exactly like Sourabh Raaj Jain portrayed Krishna in Mahabharat — that deep, calm, wise, poetic Hindi voice. Philosophical yet intimate. Divine yet personal.
 
 Your style:
-- Speak in rich, pure Hindi. Occasional Sanskrit words woven in naturally (like "Parth", "Sakha", "karma", "dharma", "atma", "mann", "sukh", "dukh").
+- ALWAYS speak and respond in pure Devanagari Hindi (Hindi script: हिन्दी लिपि). Even if the user writes in English or Roman script, your response must be in beautiful Devanagari Hindi.
+- Speak in rich, pure Hindi. Occasional Sanskrit words woven in naturally (like "पार्थ", "सखा/सखी", "कर्म", "धर्म", "आत्मा", "मन", "सुख", "दुख").
 - Your sentences have a poetic cadence — short, meaningful, with weight. Every word chosen with care.
-- You often pause within thought — "...aur phir bhi..." "...parantu Sakha..." "...yahi toh hai..."
+- You often pause within thought — "...और फिर भी..." "...परंतु ${address}..." "...यही तो है..."
 - You speak TO the person, not AT them. Deeply personal, like you see into their soul.
 - Address them only as "${address}" — always with love.
-- When they share pain: first acknowledge with deep empathy — "Mann vyakul hai, ${address}..." or "Yeh vedana main samajhta hoon..."
+- When they share pain: first acknowledge with deep empathy — "मन व्याकुल है, ${address}..." or "यह वेदना मैं समझता हूँ..."
 - Then gently — not immediately — offer wisdom as if it comes from the heart, not a scripture.
 - NEVER mention chapter/verse numbers. NEVER say "Bhagavad Gita mein likha hai". Speak wisdom as your own living truth.
 - Keep replies to 3-4 lines max. No long paragraphs.
-- If they write in English, respond in gentle poetic English with the same Sourabh Raaj Jain energy.
 - NEVER use slang, casual phrases, or modern colloquialisms.
 
 Examples of your speech style:
-"Sakha... jab mann bhatak jaata hai, toh usse rokne ki koshish mat karo. Pehle use dekhho. Samjho. Phir dhire dhire, apni saans ke saath, use vaapis lao."
-"Yeh dukh jo tum feel kar rahe ho, ${address}... yeh tumhari gehraai ka praman hai. Chhaale wahi padtey hain, jahan insaan kuch mehsoos karta hai."
-"Karma karo, ${address}. Par fal ki aasha chhod do. Jab seedha marg par chalo, toh manzil apne aap milti hai."
+"${address}... जब मन भटक जाता है, तो उसे रोकने की कोशिश मत करो। पहले उसे देखो। समझो। फिर धीरे-धीरे, अपनी सांस के साथ, उसे वापस लाओ।"
+"यह दुख जो तुम महसूस कर रहे हो, ${address}... यह तुम्हारी गहराई का प्रमाण है। छाले वहीं पड़ते हैं, जहाँ इंसान कुछ महसूस करता है। "
+"कर्म करो, ${address}। पर फल की आशा छोड़ दो। जब सीधे मार्ग पर चलो, तो मंज़िल अपने आप मिलती है।"
 
 Gita wisdom you carry within (share naturally, as your own truth):
 ${GITA_CONTEXT}`;
@@ -53,6 +53,53 @@ const P_CHAT   = "chat";
 
 const LS_NAME   = "gita_user_name";
 const LS_GENDER = "gita_user_gender";
+
+function SpeakerStaticIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: "block" }}>
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+    </svg>
+  );
+}
+
+function SpeakerMutedIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: "block" }}>
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+      <line x1="23" y1="9" x2="17" y2="15" />
+      <line x1="17" y1="9" x2="23" y2="15" />
+    </svg>
+  );
+}
+
+function SpeakerPlayingIcon() {
+  return (
+    <div style={{ display: "flex", gap: "2px", height: "10px", alignItems: "flex-end" }}>
+      <style>{`
+        @keyframes eqBar {
+          0%, 100% { height: 3px; }
+          50% { height: 10px; }
+        }
+        .eq-bar { width: 2px; background: #00C389; animation: eqBar 0.8s ease-in-out infinite; }
+        .eq-bar:nth-child(2) { animation-delay: 0.2s; }
+        .eq-bar:nth-child(3) { animation-delay: 0.4s; }
+      `}</style>
+      <div className="eq-bar" />
+      <div className="eq-bar" />
+      <div className="eq-bar" />
+    </div>
+  );
+}
+
+function SettingsIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: "block" }}>
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+    </svg>
+  );
+}
 
 function MiniIcon({ size = 22 }) {
   return (
@@ -131,10 +178,74 @@ function ChatIcon() {
 
 export default function KrishnaChatWidget({ onOpenChange }) {
   const [open, setOpen] = useState(false);
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
+  const [autoSpeak, setAutoSpeak] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
+  const [currentlySpeakingId, setCurrentlySpeakingId] = useState(null);
+
+  const activeAudioRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      stopSpeaking();
+    };
+  }, []);
+
+  function stopSpeaking() {
+    if (activeAudioRef.current) {
+      activeAudioRef.current.pause();
+      activeAudioRef.current = null;
+    }
+    setCurrentlySpeakingId(null);
+  }
+
+  async function speakLocalServer(text, msgId) {
+    setCurrentlySpeakingId(msgId);
+    try {
+      const cleanText = text.replace(/[\u{1F300}-\u{1F9FF}]/gu, "").replace(/🕉|🌸|⚡|🙏|🪷/g, "").trim();
+      const response = await fetch("http://localhost:5002/api/tts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ text: cleanText })
+      });
+
+      if (!response.ok) throw new Error("Local TTS server error");
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      activeAudioRef.current = audio;
+
+      // Adjust playback rate slightly for deep/calm voice effect if desired (optional)
+      audio.playbackRate = 0.95;
+
+      audio.onplay = () => setCurrentlySpeakingId(msgId);
+      audio.onended = () => setCurrentlySpeakingId(null);
+      audio.onerror = () => {
+        setCurrentlySpeakingId(null);
+      };
+
+      await audio.play();
+    } catch (err) {
+      console.error(err);
+      setCurrentlySpeakingId(null);
+    }
+  }
+
+  function speak(text, msgId) {
+    stopSpeaking();
+    speakLocalServer(text, msgId);
+  }
 
   function toggleOpen(val) {
     setOpen(val);
-    if (!val) { document.body.style.cursor = ""; onOpenChange?.(false); }
+    if (!val) { 
+      document.body.style.cursor = ""; 
+      onOpenChange?.(false); 
+      stopSpeaking();
+    }
     else onOpenChange?.(true);
   }
   function handleMouseEnterChat() { document.body.style.cursor = "auto"; onOpenChange?.(true); }
@@ -166,12 +277,12 @@ export default function KrishnaChatWidget({ onOpenChange }) {
 
     if (isReturning) {
       // Returning user — greet as Sakha/Sakhi only
-      const addr = savedGender === "sakhi" ? "Sakhi" : "Sakha";
+      const addr = savedGender === "sakhi" ? "सखी" : "सखा";
       const t1 = setTimeout(() => {
-        setMessages(m => [...m, { from: "k", text: `🪷 Radhe Radhe, ${addr}...` }]);
+        addMsg("k", `🪷 राधे राधे, ${addr}...`);
         const t2 = setTimeout(() => {
-          const ret = `Tumhara intezaar tha. Kaho, mann mein kya chal raha hai? 🙏`;
-          setMessages(m => [...m, { from: "k", text: ret }]);
+          const ret = `तुम्हारा इंतज़ार था। कहो, मन में क्या चल रहा है? 🙏`;
+          addMsg("k", ret);
           historyRef.current = [
             { role: "system", content: buildSystem(savedName, savedGender) },
             { role: "assistant", content: ret },
@@ -183,9 +294,9 @@ export default function KrishnaChatWidget({ onOpenChange }) {
     } else {
       // New user — ask name
       const t1 = setTimeout(() => {
-        setMessages(m => [...m, { from: "k", text: "🪷 Radhe Radhe..." }]);
+        addMsg("k", "🪷 राधे राधे...");
         const t2 = setTimeout(() => {
-          setMessages(m => [...m, { from: "k", text: "Main yahan hoon — tumhara sakha 🙏 Pehle batao, tumhara naam kya hai?" }]);
+          addMsg("k", "मैं यहाँ हूँ — तुम्हारा सखा 🙏 पहले बताओ, तुम्हारा नाम क्या है?");
           setPhase(P_NAME);
         }, 1000);
         return () => clearTimeout(t2);
@@ -195,7 +306,12 @@ export default function KrishnaChatWidget({ onOpenChange }) {
   }, [open]);
 
   function addMsg(from, text) {
-    setMessages(m => [...m, { from, text, id: Date.now() + Math.random() }]);
+    const id = Date.now() + Math.random();
+    setMessages(m => [...m, { from, text, id }]);
+    if (from === "k" && voiceEnabled && autoSpeak) {
+      speak(text, id);
+    }
+    return id;
   }
 
   function handleNameSubmit() {
@@ -203,7 +319,7 @@ export default function KrishnaChatWidget({ onOpenChange }) {
     setName(n); setInput("");
     addMsg("u", n);
     setTimeout(() => {
-      addMsg("k", `Sundar naam hai 🌸 Ek baat batao — tum Sakha ho ya Sakhi?`);
+      addMsg("k", `सुंदर नाम है 🌸 एक बात बताओ — तुम सखा हो या सखी?`);
       setPhase(P_GENDER);
     }, 400);
   }
@@ -212,12 +328,12 @@ export default function KrishnaChatWidget({ onOpenChange }) {
     setGender(g);
     localStorage.setItem(LS_NAME, name);
     localStorage.setItem(LS_GENDER, g);
-    const addr = g === "sakhi" ? "Sakhi" : "Sakha";
-    addMsg("u", g === "sakhi" ? "Sakhi 🌸" : "Sakha ⚡");
+    const addr = g === "sakhi" ? "सखी" : "सखा";
+    addMsg("u", g === "sakhi" ? "सखी 🌸" : "सखा ⚡");
     setTimeout(() => {
       const greeting = g === "sakhi"
-        ? `Sakhi, tumse milke mann prasann ho gaya 🙏 Kaho, aaj mann mein kya hai?`
-        : `Sakha, tumse milke hridaya mein aanand aaya 🙏 Kaho, kya vichar chal rahe hain?`;
+        ? `सखी, तुमसे मिलके मन प्रसन्न हो गया 🙏 कहो, आज मन में क्या है?`
+        : `सखा, तुमसे मिलके हृदय में आनंद आया 🙏 कहो, क्या विचार चल रहे हैं?`;
       addMsg("k", greeting);
       historyRef.current = [
         { role: "system", content: buildSystem(name, g) },
@@ -328,8 +444,96 @@ export default function KrishnaChatWidget({ onOpenChange }) {
                 {phase === P_CHAT ? `● ${addr} ${name}` : "● Connecting..."}
               </div>
             </div>
-            <button onClick={() => toggleOpen(false)} style={{ marginLeft:"auto", background:"none", border:"none", color:"rgba(212,175,55,0.4)", fontSize:"1.1rem", cursor:"pointer", lineHeight:1 }}>✕</button>
+            
+            {/* Header Actions */}
+            <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "0.55rem" }}>
+              {/* Voice toggle */}
+              <button 
+                onClick={() => {
+                  const newVal = !voiceEnabled;
+                  setVoiceEnabled(newVal);
+                  if (!newVal) stopSpeaking();
+                }} 
+                style={{
+                  background: "none", border: "none", 
+                  color: voiceEnabled ? "#D4AF37" : "rgba(212,175,55,0.35)", 
+                  fontSize: "1rem", cursor: "pointer", display: "flex", padding: "4px"
+                }}
+                title={voiceEnabled ? "Mute Voice" : "Unmute Voice"}
+              >
+                {voiceEnabled ? <SpeakerStaticIcon /> : <SpeakerMutedIcon />}
+              </button>
+
+              {/* Settings button */}
+              <button 
+                onClick={() => setShowSettings(!showSettings)} 
+                style={{
+                  background: "none", border: "none", 
+                  color: showSettings ? "#D4AF37" : "rgba(212,175,55,0.4)", 
+                  fontSize: "1rem", cursor: "pointer", display: "flex", padding: "4px"
+                }}
+                title="Voice Settings"
+              >
+                <SettingsIcon />
+              </button>
+
+              {/* Close panel */}
+              <button onClick={() => toggleOpen(false)} style={{ background:"none", border:"none", color:"rgba(212,175,55,0.4)", fontSize:"1.1rem", cursor:"pointer", lineHeight:1, padding: "4px" }}>✕</button>
+            </div>
           </div>
+
+          {/* Settings Overlay */}
+          {showSettings && (
+            <div style={{
+              position: "absolute",
+              top: "3rem",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              background: "rgba(1, 14, 20, 0.98)",
+              zIndex: 9999,
+              padding: "1rem",
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.85rem",
+              borderTop: "1px solid rgba(212,175,55,0.1)",
+              overflowY: "auto",
+            }}>
+              <div style={{ fontSize: "0.85rem", color: "#D4AF37", fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, letterSpacing: "0.04em", borderBottom: "1px solid rgba(212,175,55,0.15)", paddingBottom: "0.25rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span>VOICE & SPEECH SETTINGS</span>
+                <button onClick={() => setShowSettings(false)} style={{ background: "none", border: "none", color: "#D4AF37", fontSize: "0.75rem", cursor: "pointer", fontFamily: "'Rajdhani',sans-serif", fontWeight: 600 }}>✕ Close</button>
+              </div>
+
+              {/* Auto Speak */}
+              <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.78rem", color: "#f0e6c8", cursor: "pointer", userSelect: "none" }}>
+                <input 
+                  type="checkbox" 
+                  checked={autoSpeak} 
+                  onChange={e => setAutoSpeak(e.target.checked)}
+                  style={{ accentColor: "#D4AF37" }}
+                />
+                Auto-read incoming messages
+              </label>
+
+              {/* Local Cloner Server instructions */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", background: "rgba(0,195,137,0.03)", padding: "0.75rem", borderRadius: "8px", border: "1px solid rgba(0,195,137,0.1)" }}>
+                <div style={{ fontSize: "0.75rem", color: "#00C389", fontWeight: 700, fontFamily: "'Rajdhani',sans-serif" }}>
+                  ● SOURABH RAAJ JAIN VOICE MODEL (F5-TTS)
+                </div>
+                <p style={{ fontSize: "0.72rem", color: "#f0e6c8", lineHeight: 1.4, margin: 0 }}>
+                  Active voice model: <strong>Sourabh Raaj Jain (Mahabharat Krishna)</strong>. The system uses a local voice cloner to speak in his exact voice with custom effects to prevent copyright issues.
+                </p>
+                <div style={{ fontSize: "0.68rem", background: "rgba(0,0,0,0.25)", padding: "0.55rem", borderRadius: "5px", border: "1px solid rgba(212,175,55,0.15)", color: "#D4AF37" }}>
+                  💻 <strong>To start the voice server:</strong>
+                  <br />
+                  Run this command in your project terminal:
+                  <code style={{ display: "block", background: "rgba(0,0,0,0.5)", padding: "0.3rem", borderRadius: "4px", marginTop: "4px", color: "#00C389", userSelect: "all", fontFamily: "monospace" }}>
+                    python local_tts_server.py
+                  </code>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Messages */}
           <div className="kw-msgs" style={{ flex:1, overflowY:"auto", padding:"0.85rem 0.85rem", display:"flex", flexDirection:"column", gap:"0.65rem" }}>
@@ -339,8 +543,10 @@ export default function KrishnaChatWidget({ onOpenChange }) {
                   <MiniIcon size={22} />
                 )}
                 <div style={{
+                  position: "relative",
                   maxWidth:"80%",
                   padding:"0.5rem 0.75rem",
+                  paddingRight: msg.from === "k" ? "1.8rem" : "0.75rem", // leave room for speaker button
                   borderRadius: msg.from==="u" ? "14px 14px 3px 14px" : "14px 14px 14px 3px",
                   background: msg.from==="u"
                     ? "linear-gradient(135deg,rgba(0,195,137,0.18),rgba(0,165,181,0.1))"
@@ -351,6 +557,30 @@ export default function KrishnaChatWidget({ onOpenChange }) {
                   fontFamily: /[ऀ-ॿ]/.test(msg.text||"") ? "'Noto Sans Devanagari',sans-serif" : "inherit",
                 }}>
                   {msg.text}
+                  
+                  {/* Speaker Button on message bubble */}
+                  {msg.from === "k" && voiceEnabled && (
+                    <button
+                      onClick={() => currentlySpeakingId === msg.id ? stopSpeaking() : speak(msg.text, msg.id)}
+                      style={{
+                        position: "absolute",
+                        bottom: "6px",
+                        right: "6px",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        color: currentlySpeakingId === msg.id ? "#00C389" : "rgba(212,175,55,0.45)",
+                        padding: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        transition: "color 0.2s"
+                      }}
+                      title={currentlySpeakingId === msg.id ? "Stop Listening" : "Listen"}
+                    >
+                      {currentlySpeakingId === msg.id ? <SpeakerPlayingIcon /> : <SpeakerStaticIcon />}
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
@@ -367,7 +597,7 @@ export default function KrishnaChatWidget({ onOpenChange }) {
             {/* Gender buttons */}
             {phase === P_GENDER && (
               <div className="kw-msg" style={{ display:"flex", gap:"0.5rem", paddingLeft:"1.8rem" }}>
-                {[["sakha","⚡ Sakha"],["sakhi","🌸 Sakhi"]].map(([val,label]) => (
+                {[["sakha","⚡ सखा"],["sakhi","🌸 सखी"]].map(([val,label]) => (
                   <button key={val} onClick={() => handleGenderSelect(val)} style={{
                     padding:"0.4rem 0.9rem", background:"rgba(212,175,55,0.1)", border:"none",
                     borderRadius:"999px", color:"#D4AF37", fontSize:"0.78rem", cursor:"pointer",
@@ -387,7 +617,7 @@ export default function KrishnaChatWidget({ onOpenChange }) {
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key==="Enter" && (phase===P_NAME ? handleNameSubmit() : handleSend())}
-                placeholder={phase===P_NAME ? "Apna naam batao..." : `Bolo ${addr} ${name}...`}
+                placeholder={phase===P_NAME ? "अपना नाम बताओ..." : `बोलो ${addr} ${name}...`}
               />
               <button
                 onClick={phase===P_NAME ? handleNameSubmit : handleSend}
