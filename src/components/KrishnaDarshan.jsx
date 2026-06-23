@@ -131,7 +131,7 @@ export default function KrishnaDarshan() {
           onClick={() => setOpen(true)}
           title="Krishna Darshan — Generate divine image"
           style={{
-            position: "fixed", bottom: "8rem", right: "1.2rem",
+            position: "fixed", bottom: "3.5rem", left: "1.2rem",
             zIndex: 9995,
             display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
             cursor: "pointer",
